@@ -3,7 +3,7 @@ from pygridmap import gridtiler_raster
 print("start")
 for res in [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100]:
     print(res)
-    tiling_raster(
+    gridtiler_raster.tiling_raster(
         {
         "tcd_2012":{"file":'/home/juju/geodata/forest/in/forest_TCD_2012_100.tif', "band":1, 'no_data_values':[255,0]},
         "tcd_2015":{"file":'/home/juju/geodata/forest/in/forest_TCD_2015_100.tif', "band":1, 'no_data_values':[255,0]},
