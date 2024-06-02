@@ -12,7 +12,7 @@ for res in [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100]:
         "dlt_2015":{"file":'/home/juju/geodata/forest/in/forest_DLT_2015_100.tif', "band":1, 'no_data_values':[255,0]},
         "dlt_2018":{"file":'/home/juju/geodata/forest/in/forest_DLT_2018_100.tif', "band":1, 'no_data_values':[255,0]}
     },
-    "/home/juju/Bureau/forest/"+str(res)+"/",
+    "pub/parquet/"+str(res)+"/",
     res,
     900000,
     900000,
