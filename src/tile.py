@@ -22,5 +22,6 @@ for res in [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100]:
     7400000,
     5500000,
     tile_size_cell=256,
-    format="parquet"
+    format="parquet",
+    num_processors_to_use=8
     )
