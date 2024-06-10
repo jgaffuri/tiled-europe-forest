@@ -3,8 +3,8 @@ from pygridmap import gridtiler_raster
 input_data_folder = "/home/juju/geodata/forest/"
 
 print("start")
-#for res in [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100]:
-for res in [100]:
+for res in [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100]:
+#for res in [100]:
     print(res)
 
     gridtiler_raster.tiling_raster(
