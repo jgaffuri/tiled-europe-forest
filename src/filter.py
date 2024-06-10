@@ -29,8 +29,8 @@ for year in [2012,2015,2018]:
     print(year)
 
     year = str(year)
-    input_file = '/home/juju/geodata/forest/in/forest_TCD_'+year+'_100_.tif'
-    output_file = '/home/juju/geodata/forest/in/forest_TCD_'+year+'_100.tif'
+    input_file = '/home/juju/geodata/forest/forest_TCD_'+year+'_100_.tif'
+    output_file = '/home/juju/geodata/forest/forest_TCD_'+year+'_100.tif'
 
     # Open the input GeoTIFF file
     with rasterio.open(input_file) as src:
