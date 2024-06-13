@@ -229,4 +229,3 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
     with open(output_folder + '/info.json', 'w') as json_file:
         json.dump(data, json_file, indent=3)
-
