@@ -105,6 +105,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
         #handle every raster
         for key in keys:
+            #print(key)
 
             raster = rasters[key]
             src = raster["src"]
@@ -112,9 +113,12 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
             #read tile data for key
             data = src.read(1, window=window)
 
+            #get dimensions of the data matrix
+            data_height, data_width = data.shape
+
             #make cells
-            for col in range(0, tile_size_cell):
-                for row in range(0, tile_size_cell):
+            for col in range(0, data_width):
+                for row in range(0, data_height):
 
                     #get value
                     value = data[row, col]
@@ -135,10 +139,10 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         cells = [cell for col in cells_index.values() for cell in col.values()]
         del cells_index
 
-        print(len(cells), "cells")
-
         #if no cell within tile, skip
         if len(cells) == 0: return
+
+        print(datetime.now(), "tile", xt, yt, "-", len(cells), "cells")
 
         #remove column with all values null
         #check columns
