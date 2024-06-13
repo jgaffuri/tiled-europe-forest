@@ -24,7 +24,7 @@ Tile gridded data from raster files for visualisation with GridViz javascript li
 
 
 import rasterio
-from math import ceil,floor
+from math import floor
 import os
 import csv
 import json
@@ -130,7 +130,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
                     if col in cells_index: col_ = cells_index[col]
                     else: col_ = {}; cells_index[col] = col_
                     if row in col_: cell = col_[row]
-                    else: cell = build_cell(col, tile_size_cell-row-1); col_[row] = cell
+                    else: cell = build_cell(col, row); col_[row] = cell
 
                     #set cell value
                     cell[key] = value
