@@ -70,14 +70,8 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         raster["data"] = src.read(raster["band"])
         if not "no_data_values" in raster: raster["no_data_values"] = []
 
+    #bounds
     x_min, y_min, x_max, y_max = bounds.left, bounds.bottom, bounds.right, bounds.top
-
-    #tile frame caracteristics
-    tile_size_geo = resolution * tile_size_cell
-    tile_min_x = 0 #floor( (x_min - x_origin) / tile_size_geo )
-    tile_min_y = 0 #floor( (y_min - y_origin) / tile_size_geo )
-    tile_max_x = floor( (x_max - x_min) / tile_size_geo )
-    tile_max_y = floor( (y_max - y_min) / tile_size_geo )
 
     #get keys
     keys = rasters.keys()
@@ -99,7 +93,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         #prepare raster data query window
         min_col = xt * tile_size_cell
         #min_row = yt * tile_size_cell
-        min_row = heigth - (yt+1) * tile_size_cell #-1 ???
+        min_row = heigth - (yt+1) * tile_size_cell
         #col first, then row: window(col, row, w, h)
         window = rasterio.windows.Window(min_col, min_row, tile_size_cell, tile_size_cell)
         #print(min_col, min_row)
@@ -112,8 +106,8 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
             raster = rasters[key]
             src = raster["src"]
 
-            #read tile data for key
-            data = src.read(1, window=window)
+            #get tile data for key
+            data = src.read(raster["band"], window=window)
 
             #get dimensions of the data matrix
             data_height, data_width = data.shape
@@ -141,10 +135,10 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         cells = [cell for col in cells_index.values() for cell in col.values()]
         del cells_index
 
+        print(datetime.now(), "tile", xt, yt, "-", len(cells), "cells")
+
         #if no cell within tile, skip
         if len(cells) == 0: return
-
-        print(datetime.now(), "tile", xt, yt, "-", len(cells), "cells")
 
         #remove column with all values null
         #check columns
@@ -198,6 +192,14 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
 
 
+    #tile frame caracteristics
+    tile_size_geo = resolution * tile_size_cell
+    tile_min_x = 0 #floor( (x_min - x_origin) / tile_size_geo )
+    tile_min_y = 0 #floor( (y_min - y_origin) / tile_size_geo )
+    tile_max_x = floor( (x_max - x_min) / tile_size_geo )
+    tile_max_y = floor( (y_max - y_min) / tile_size_geo )
+
+
     #make list of tiles x,y
     pairs = []
     for xt in range(tile_min_x, tile_max_x+1):
@@ -207,6 +209,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
     #make tiles, in parallel
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_processors_to_use) as executor:
         { executor.submit(make_tile, tile): tile for tile in pairs }
+
 
     #write info.json
     data = {
