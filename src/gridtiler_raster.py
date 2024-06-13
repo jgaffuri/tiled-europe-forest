@@ -83,7 +83,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
     keys = rasters.keys()
 
     #function to make cell template
-    def build_cell(x,y):
+    def build_cell(x, y):
         c = { "x":x, "y":y }
         for k in keys: c[k] = None
         return c
@@ -98,23 +98,26 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
         #prepare raster data query window
         min_col = xt * tile_size_cell
-        min_row = width - 1 - yt * tile_size_cell - tile_size_cell
+        min_row = width - (yt+1) * tile_size_cell
+        #col first, then row: window(col, row, w, h)
         window = rasterio.windows.Window(min_col, min_row, tile_size_cell, tile_size_cell)
+        #print(min_col, min_row)
 
-        print(min_col, min_row)
-
-
-        for key in []: #keys:
+        #handle every raster
+        for key in keys:
 
             raster = rasters[key]
             src = raster["src"]
+
+            #read tile data for key
             data = src.read(1, window=window)
 
+            #make cells
             for col in range(0, tile_size_cell):
                 for row in range(0, tile_size_cell):
 
                     #get value
-                    value = data[col,row]
+                    value = data[row, col]
 
                     #if no value, skip
                     if value == raster["nodata"] or value in raster["no_data_values"]: continue
@@ -132,10 +135,10 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         cells = [cell for col in cells_index.values() for cell in col.values()]
         del cells_index
 
+        print(len(cells), "cells")
+
         #if no cell within tile, skip
         if len(cells) == 0: return
-
-        print(len(cells), "cells")
 
         #remove column with all values null
         #check columns
@@ -183,9 +186,6 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         df.to_parquet(fo + str(yt) + ".parquet", engine='pyarrow', compression=parquet_compression, index=False)
         #delete csv file
         os.remove(cfp)
-
-        return xyt
-
 
 
 
