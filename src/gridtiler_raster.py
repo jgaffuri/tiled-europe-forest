@@ -130,7 +130,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
                     if col in cells_index: col_ = cells_index[col]
                     else: col_ = {}; cells_index[col] = col_
                     if row in col_: cell = col_[row]
-                    else: cell = build_cell(col, row); col_[row] = cell
+                    else: cell = build_cell(col, tile_size_cell-1-row); col_[row] = cell
 
                     #set cell value
                     cell[key] = value
