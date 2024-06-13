@@ -98,7 +98,8 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
         #prepare raster data query window
         min_col = xt * tile_size_cell
-        min_row = heigth - (yt+1) * tile_size_cell #-1 ???
+        min_row = yt * tile_size_cell
+        #min_row = heigth - (yt+1) * tile_size_cell #-1 ???
         #col first, then row: window(col, row, w, h)
         window = rasterio.windows.Window(min_col, min_row, tile_size_cell, tile_size_cell)
         #print(min_col, min_row)
@@ -131,7 +132,8 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
                     if col in cells_index: col_ = cells_index[col]
                     else: col_ = {}; cells_index[col] = col_
                     if row in col_: cell = col_[row]
-                    else: cell = build_cell(col, tile_size_cell-1-row); col_[row] = cell
+                    else: cell = build_cell(col, row); col_[row] = cell
+                    #tile_size_cell-1-row
 
                     #set cell value
                     cell[key] = value
