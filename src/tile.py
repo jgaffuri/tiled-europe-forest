@@ -20,13 +20,13 @@ for res in [10000]:
         "dlt_2015":{"file":input_data_folder+'forest_DLT_2015_'+str(res)+'.tif', "band":1, 'no_data_values':[255,254,0]},
         "dlt_2018":{"file":input_data_folder+'forest_DLT_2018_'+str(res)+'.tif', "band":1, 'no_data_values':[255,254,0]}
     },
-    "./pub/parquet/"+str(res),
+    "./pub/parquet___/"+str(res),
     #res,
     #900000,
     #900000,
     #7400000,
     #5500000,
     tile_size_cell=256,
-    format="parquet",
+    format="csv",
     num_processors_to_use=1
     )

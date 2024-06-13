@@ -101,7 +101,10 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         min_row = width - 1 - yt * tile_size_cell - tile_size_cell
         window = rasterio.windows.Window(min_col, min_row, tile_size_cell, tile_size_cell)
 
-        for key in keys:
+        print(min_col, min_row)
+
+
+        for key in []: #keys:
 
             raster = rasters[key]
             src = raster["src"]
@@ -132,7 +135,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         #if no cell within tile, skip
         if len(cells) == 0: return
 
-        print(len(cells))
+        print(len(cells), "cells")
 
         #remove column with all values null
         #check columns
@@ -191,8 +194,8 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
     #make list of tiles x,y
     pairs = []
-    for xt in range(tile_min_x, tile_max_x):
-        for yt in range(tile_min_y, tile_max_y):
+    for xt in range(tile_min_x, tile_max_x+1):
+        for yt in range(tile_min_y, tile_max_y+1):
             pairs.append([xt, yt])
 
     #make tiles, in parallel
@@ -212,13 +215,12 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         "tilingBounds": {
             "xMin": 0,
             "yMin": 0,
-            "xMax": tile_max_x -1,
-            "yMax": tile_max_y -1
+            "xMax": tile_max_x,
+            "yMax": tile_max_y
         }
     }
 
-    print(data)
-    print(output_folder + '/info.json')
+    if not os.path.exists(output_folder): os.makedirs(output_folder)
 
     with open(output_folder + '/info.json', 'w') as json_file:
         json.dump(data, json_file, indent=3)
