@@ -34,7 +34,7 @@ from datetime import datetime
 
 
 def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, format="csv", parquet_compression="snappy", num_processors_to_use=1):
-    """Tile gridded statistics from raster files.
+    """Tile gridded statistics from raster files. Note: all raster files should be based on the same gridded system: same resolution, same size, same origin point.
 
     Args:
         rasters (dict): A dictionnary with all data on the attributes and the raster file they are retrieved from.
@@ -48,16 +48,19 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
         _type_: _description_
     """
 
-    #prepare and load raster file data
+    #prepare variable
     resolution = None
     bounds = None
     width = None
     height = None
+
+    #prepare and load raster file data
     for label in rasters:
         raster = rasters[label]
         #open file
         src = rasterio.open(raster["file"])
 
+        #get base information on the rasters
         if resolution==None: resolution = src.res[0]
         if bounds==None: bounds = src.bounds
         if width==None: width = src.width
