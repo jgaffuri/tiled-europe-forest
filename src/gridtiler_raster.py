@@ -18,7 +18,7 @@ Tile gridded data from raster files for visualisation with GridViz javascript li
 """
 
 # *credits*:      `jgaffuri <julien.gaffuri@ec.europa.eu>`_ 
-# *since*:        May 2024
+# *since*:        June 2024
 
 #%% Settings     
 
@@ -30,9 +30,7 @@ import csv
 import json
 import pandas as pd
 import concurrent.futures
-import numpy as np
 from datetime import datetime
-
 
 
 def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, format="csv", parquet_compression="snappy", num_processors_to_use=1):
