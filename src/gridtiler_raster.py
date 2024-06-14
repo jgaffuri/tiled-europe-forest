@@ -205,18 +205,7 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
     tile_max_y = floor( (y_max - y_min) / tile_size_geo )
 
 
-    #make list of tiles x,y
-    pairs = []
-    for xt in range(tile_min_x, tile_max_x+1):
-        for yt in range(tile_min_y, tile_max_y+1):
-            pairs.append([xt, yt])
-
-    #make tiles, in parallel
-    with concurrent.futures.ThreadPoolExecutor(max_workers=num_processors_to_use) as executor:
-        { executor.submit(make_tile, tile): tile for tile in pairs }
-
-
-    #write info.json
+    #write info.json file
     data = {
         "dims": [],
         "crs": crs,
@@ -238,3 +227,15 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
 
     with open(output_folder + '/info.json', 'w') as json_file:
         json.dump(data, json_file, indent=3)
+
+
+
+    #make list of tiles x,y
+    pairs = []
+    for xt in range(tile_min_x, tile_max_x+1):
+        for yt in range(tile_min_y, tile_max_y+1):
+            pairs.append([xt, yt])
+
+    #make tiles, in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_processors_to_use) as executor:
+        { executor.submit(make_tile, tile): tile for tile in pairs }
