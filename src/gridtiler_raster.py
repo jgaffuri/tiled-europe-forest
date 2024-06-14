@@ -154,6 +154,9 @@ def tiling_raster_fast(rasters, output_folder, crs="", tile_size_cell=128, forma
             if toRemove:
                 for c in cells: del c[key]
 
+        #sort cells
+        cells = sorted(cells, key=lambda d: (d['x'], d['y']))
+
         #make csv header, ensuring x and y are first columns
         headers = list(cells[0].keys())
         headers.remove("x")
